@@ -1,23 +1,32 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] private GameObject levelPrefab;
-    private readonly List<GameObject> _levelItems = new ();
-    private readonly Vector3 _startPosition = new(0, 0, 0);
-
-    public void StartGame()
+    private GameObject level;
+    private readonly Vector3 startPosition = new(0, 0, 0);
+    private GameObject hole;
+    private const float Scaler = 1.3f;
+    private const int MaxHoleSize = 4;
+    private int holeSize;
+    
+    public GameObject StartGame()
     {
-        _levelItems.Add(Instantiate(levelPrefab, _startPosition, Quaternion.identity));
+        level = Instantiate(levelPrefab, startPosition, Quaternion.identity);
+        hole = level.GetComponentInChildren<HoleController>().gameObject;
+        holeSize = 0;
+        return hole;
     }
 
     public void EndGame()
     {
-        foreach (var item in _levelItems)
-        {
-            Destroy(item);
-        }
+        Destroy(level);
+    }
+
+    public void IncreaseHole()
+    {
+        if (holeSize >= MaxHoleSize) return;
+        hole.transform.localScale *= Scaler;
+        holeSize++;
     }
 }

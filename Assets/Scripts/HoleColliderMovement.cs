@@ -5,8 +5,8 @@ public class HoleColliderMovement : MonoBehaviour
     [SerializeField] private PolygonCollider2D holePolygonCollider2D;
     [SerializeField] private PolygonCollider2D groundPolygonCollider2D;
     [SerializeField] private MeshCollider generatedMeshCollider;
-    [SerializeField] private float initialScale = 0.5f;
-    private Mesh _generatedMesh;
+    [SerializeField] private float initialScale = 2f;
+    private Mesh generatedMesh;
 
     private void FixedUpdate()
     {
@@ -39,8 +39,10 @@ public class HoleColliderMovement : MonoBehaviour
 
     private void Mesh3DCollider()
     {
-        if(_generatedMesh != null) Destroy(_generatedMesh);
-        _generatedMesh = groundPolygonCollider2D.CreateMesh(true, true);
-        generatedMeshCollider.sharedMesh = _generatedMesh;
+        if(generatedMesh != null) Destroy(generatedMesh);
+        generatedMesh = groundPolygonCollider2D.CreateMesh(true, true);
+        generatedMeshCollider.sharedMesh = generatedMesh;
     }
+    
+    
 }

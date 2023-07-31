@@ -1,21 +1,28 @@
-using System;
+using Packages.Joystick_Pack.Scripts.Joysticks;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class HoleController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rigidbody;
-    private FloatingJoystick _floatingJoystick;
+    [SerializeField] private new Rigidbody rigidbody;
+    private FloatingJoystick floatingJoystick;
     [SerializeField] private float speed;
 
-    private void Awake()
+    private void Start()
     {
-        _floatingJoystick = FindObjectOfType<FloatingJoystick>();
+        floatingJoystick = FindObjectOfType<FloatingJoystick>();
     }
 
     private void FixedUpdate()
     {
-        rigidbody.velocity = new Vector3(_floatingJoystick.Horizontal * speed,
-            0, _floatingJoystick.Vertical * speed);
+        var newVelocity = new Vector3(floatingJoystick.Horizontal * speed,
+            0, floatingJoystick.Vertical * speed);
+        rigidbody.velocity = newVelocity;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer != LayerMask.NameToLayer("Collectables")) return;
+        other.isTrigger = false;
+        other.gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
 }
